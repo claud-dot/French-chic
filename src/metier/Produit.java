@@ -9,7 +9,7 @@ public class Produit {
     private boolean estDuJour;
     private String[] motCles;
     private int quantiteEnStock;
-    private static ArrayList<Produit> lesProduits = new ArrayList<Produit>();
+    private static Produit[] lesProduits;
 
     public Produit(){
         this.libelle="produit de test";
@@ -22,7 +22,6 @@ public class Produit {
         this.estDuJour = estDuJour;
         this.motCles = motCles;
         this.quantiteEnStock = quantiteEnStock;
-        lesProduits.add(this);
     }
 
     public static Produit rechercherProduitDuJour() {
@@ -100,12 +99,19 @@ public class Produit {
         this.quantiteEnStock = quantiteEnStock;
     }
 
-    public static ArrayList<Produit> getLesProduits() {
+    public static Produit[] getLesProduits() {
         return lesProduits;
     }
 
-    public static void setLesProduits(ArrayList<Produit> lesProduits) {
+    public static void setLesProduits(Produit[] lesProduits) {
         Produit.lesProduits = lesProduits;
     }
 
+    public static void initializeProduits(){
+        lesProduits = new Produit[]{
+            new Produit("prod-001" ,"Cravates", 15, false , new String[]{"Chemise", "Costard"},200),
+            new Produit("prod-002", "Pantalon jean", 25, true, new String[]{"pantalon","jean"}, 300),
+            new Produit("prod-003", "Cabas Gucci Blondie petite taille", 50, false, new String[]{"Cab","Gucci"}, 150 )
+        };
+    }
 }

@@ -141,7 +141,7 @@ public class VueJetable {
         bonjourTexte.setSize(250, 20);
         bonjourTexte.setLocation(150, 200);
 
-        String produitTxt = "Le produit du jour est le \"" + produit.getLibelle() + "\" au prix de " + produit.getPrix() + " Euros";
+        String produitTxt = "Le produit du jour est le \"" + produit.getLibelle() + "\" au prix de " + produit.getPrix() + " €"+"\n Quantité en stock "+produit.getQuantiteEnStock();
         produitDuJourTexte = new JLabel(produitTxt);
         produitDuJourTexte.setSize(500, 20);
         produitDuJourTexte.setLocation(150, 250);
@@ -257,8 +257,8 @@ public class VueJetable {
     // }
     
     private static void initialize(){
-        // Client.initializeClients();
+        Client.initializeClients();
         // Commande.initializeCommandes();
-        // Produit.initializeProduits();
+        Produit.initializeProduits();
     }
 }

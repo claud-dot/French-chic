@@ -18,11 +18,10 @@ public class Session {
         // et de retourner l'écran courant (par exemple ECRAN_ACCUEIL_PERSO)
         // ainsi que les informations du client et du produit (en tant que paramètres)
 
-        Client clients=new Client();
         for (Client client : Client.getLesClients()) {
             if (client.getPseudo().trim().equals(pseudo) && client.getMotDePasse().trim().equals(motDePasse)) {
                 this.ecranCourant=EnumTypeEcran.ECRAN_ACCUEIL_PERSO;
-                return new TraiterIdentificationReponse(ecranCourant, client, new Produit());
+                return new TraiterIdentificationReponse(ecranCourant, client, Produit.rechercherProduitDuJour());
             }
         }
         return new TraiterIdentificationReponse(ecranCourant, null, null);

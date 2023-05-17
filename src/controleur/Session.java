@@ -1,6 +1,8 @@
 package controleur;
 
 import metier.Client;
+import metier.Commande;
+import metier.LigneCommande;
 import metier.Produit;
 
 public class Session {
@@ -22,10 +24,16 @@ public class Session {
         for (Client client : Client.getLesClients()) {
             if (client.getPseudo().trim().equals(pseudo) && client.getMotDePasse().trim().equals(motDePasse)) {
                 this.ecranCourant=EnumTypeEcran.ECRAN_ACCUEIL_PERSO;
-                return new TraiterIdentificationReponse(ecranCourant, client, new Produit());
+                return new TraiterIdentificationReponse(ecranCourant, client, new Produit().getProduitDuJour());
             }
         }
         return new TraiterIdentificationReponse(ecranCourant, null, null);
         
+    }
+    public TraiterAjoutPanierReponse traiterAjoutPanier(Produit produit, int intg){
+        this.ecranCourant=EnumTypeEcran.ECRAN_PANIER;
+        LigneCommande ligneCommande=new LigneCommande(produit,intg);
+        Commande commande_=new Commande(new LigneCommande[]{ligneCommande});
+        return new TraiterAjoutPanierReponse(this.ecranCourant, commande_);
     }
 }

@@ -9,11 +9,10 @@ public class Produit {
     private boolean estDuJour;
     private String[] motCles;
     private int quantiteEnStock;
-    private static ArrayList<Produit> lesProduits = new ArrayList<Produit>();
+    private static ArrayList<Produit> lesProduits;
 
     public Produit(){
-        this.libelle="produit de test";
-        this.prix=1000;
+        initializeProduits();
     }
     public Produit(String reference, String libelle, float prix, boolean estDuJour, String[] motCles, int quantiteEnStock) {
         this.reference = reference;
@@ -22,7 +21,6 @@ public class Produit {
         this.estDuJour = estDuJour;
         this.motCles = motCles;
         this.quantiteEnStock = quantiteEnStock;
-        lesProduits.add(this);
     }
 
     public static Produit rechercherProduitDuJour() {
@@ -106,6 +104,23 @@ public class Produit {
 
     public static void setLesProduits(ArrayList<Produit> lesProduits) {
         Produit.lesProduits = lesProduits;
+    }
+
+    public void initializeProduits(){
+        Produit produit1 = new Produit("REF001", "Pommes", 1000.5f, false, new String[] {"fruit", "santé"}, 50);
+        Produit produit2 = new Produit("REF002", "Chocolat", 3000.8f, true, new String[] {"gourmandise", "douceur"}, 20);
+        Produit produit3 = new Produit("REF003", "Poulet rôti", 10000.0f, true, new String[] {"viande", "délicieux"}, 5);
+        lesProduits=new ArrayList<>();
+        lesProduits.add(produit1);
+        lesProduits.add(produit2);
+        lesProduits.add(produit3);
+    }
+
+    public Produit getProduitDuJour(){
+        for (Produit produit : lesProduits) {
+            if(produit.estDuJour)return produit;
+        }
+        return null;
     }
 
 }

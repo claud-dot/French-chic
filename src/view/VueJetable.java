@@ -216,8 +216,6 @@ public class VueJetable {
         title.setForeground(Color.MAGENTA);
 
         LigneCommande ligneC = laCommande.getLesCommandes()[0];
-//        NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
-//        nf.setMinimumFractionDigits(2);
 
         String prixHTLg = ligneC.geProduit().getPrix()+"";
         String montantLg = ligneC.getMontant()+"";
@@ -234,7 +232,7 @@ public class VueJetable {
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setDefaultRenderer(new CustomHeaderRenderer());
         Font tableFont = table.getFont();
-        Font resizedFont = tableFont.deriveFont(tableFont.getSize() + 2f); // Ajustez la taille de la police selon vos préférences
+        Font resizedFont = tableFont.deriveFont(tableFont.getSize() + 2f);
         table.setFont(resizedFont);
         //Row
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

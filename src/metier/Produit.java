@@ -107,9 +107,9 @@ public class Produit {
     }
 
     public void initializeProduits(){
-        Produit produit1 = new Produit("REF001", "Pommes", 1000.5f, false, new String[] {"fruit", "santé"}, 50);
-        Produit produit2 = new Produit("REF002", "Chocolat", 3000.8f, true, new String[] {"gourmandise", "douceur"}, 20);
-        Produit produit3 = new Produit("REF003", "Poulet rôti", 10000.0f, true, new String[] {"viande", "délicieux"}, 5);
+        Produit produit1 = new Produit("REF001", "Cravate", 20f, false, new String[] {"chemise", "cravate"}, 50);
+        Produit produit2 = new Produit("REF002", "Pantalon jean", 30f, true, new String[] {"pantalon", "jean"}, 20);
+        Produit produit3 = new Produit("REF003", "Cabas Gucci Blondie petite taille", 50f, false, new String[] {"Gucci", "Cabas"}, 10);
         lesProduits=new ArrayList<>();
         lesProduits.add(produit1);
         lesProduits.add(produit2);

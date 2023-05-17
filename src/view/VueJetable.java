@@ -24,6 +24,9 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import controleur.*;
 import metier.*;
@@ -142,7 +145,7 @@ public class VueJetable {
         bonjourTexte.setSize(250, 20);
         bonjourTexte.setLocation(150, 200);
 
-        String produitTxt = "Le produit du jour est le \"" + produit.getLibelle() + "\" au prix de " + produit.getPrix() + " Euros";
+        String produitTxt = "Le produit du jour est le \"" + produit.getLibelle() + "\" au prix de " + produit.getPrix() + " €";
         produitDuJourTexte = new JLabel(produitTxt);
         produitDuJourTexte.setSize(500, 20);
         produitDuJourTexte.setLocation(150, 250);
@@ -206,34 +209,47 @@ public class VueJetable {
         frame.setLayout(null);
 
         JLabel title = new JLabel("Votre Panier");
-        title.setLocation(150, 50);
+        title.setLocation(30, 20);
         title.setSize(1000, 100);
-        Font f = new Font("", Font.PLAIN, 70);
+        Font f = new Font("", Font.PLAIN, 50);
         title.setFont(f);
         title.setForeground(Color.MAGENTA);
 
         LigneCommande ligneC = laCommande.getLesCommandes()[0];
-        NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
-        nf.setMinimumFractionDigits(2);
+//        NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
+//        nf.setMinimumFractionDigits(2);
 
-        String prixHTLg = nf.format(ligneC.geProduit().getPrix());
-        String montantLg = nf.format(ligneC.getMontant());
+        String prixHTLg = ligneC.geProduit().getPrix()+"";
+        String montantLg = ligneC.getMontant()+"";
         int stock = ligneC.getStock();
 
-        String[] entetes = {"Libelle", "Prix", "Quantité", "Montant" , "Stock"};
+        String[] entetes = {"Libellé", "Prix", "Quantité", "Montant" , "Stock"};
 
         Object[][] donnees = {
-            {ligneC.geProduit().getLibelle(), prixHTLg, new Integer(ligneC.getQuantite()).toString(), montantLg , stock},};
+            {ligneC.geProduit().getLibelle(), prixHTLg+" €", new Integer(ligneC.getQuantite()).toString(), montantLg+" €" , stock},};
 
-        JTable table = new JTable(donnees, entetes);
-        table.setSize(400, 100);
-        table.setLocation(125, 200);
+        DefaultTableModel model = new DefaultTableModel(donnees, entetes);
+        JTable table = new JTable(model);
+        //entete
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setDefaultRenderer(new CustomHeaderRenderer());
+        Font tableFont = table.getFont();
+        Font resizedFont = tableFont.deriveFont(tableFont.getSize() + 2f); // Ajustez la taille de la police selon vos préférences
+        table.setFont(resizedFont);
+        //Row
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int columnIndex = 0; columnIndex < table.getColumnCount(); columnIndex++) {
+            table.getColumnModel().getColumn(columnIndex).setCellRenderer(centerRenderer);
+        }
+        JScrollPane scrollPane = new JScrollPane(table);
+        Dimension preferredSize = new Dimension(600, 200);
+        scrollPane.setPreferredSize(preferredSize);
         JPanel paneTab = new JPanel();
-        paneTab.setLocation(125, 200);
-        paneTab.setSize(400, 200);
+        paneTab.setLocation(30, 150);
+        paneTab.setSize(600, 200);
         paneTab.setBackground(Color.WHITE);
-        paneTab.add(table.getTableHeader(), BorderLayout.NORTH);
-        paneTab.add(table, BorderLayout.CENTER);
+        paneTab.add(scrollPane);
 
         JLabel montantLabel = null;
 
@@ -251,9 +267,9 @@ public class VueJetable {
         montantField.setLocation(350, 420);
         montantField.setSize(100, largeur);
 
-        String total = nf.format(laCommande.getMontant());
+        String total = laCommande.getMontant()+"";
 
-        String montantTxt = String.valueOf(total) + " Euros";
+        String montantTxt = String.valueOf(total) + " €";
         montantField.setText(montantTxt);
         montantField.setEditable(false);
 
@@ -269,4 +285,16 @@ public class VueJetable {
         // Commande.initializeCommandes();
         // Produit.initializeProduits();
     }
+
+    static class CustomHeaderRenderer extends DefaultTableCellRenderer {
+        public CustomHeaderRenderer() {
+            setHorizontalAlignment(SwingConstants.CENTER);
+            setBackground(Color.MAGENTA);
+            setForeground(Color.WHITE);
+            Font font = getFont();
+            setFont(font.deriveFont(font.getStyle() | Font.BOLD));
+        }
+    }
 }
+
+

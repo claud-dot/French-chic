@@ -19,5 +19,7 @@ public class LigneCommande {
         return this.produit.getPrix()*this.quantite;
     }
 
+    public int getStock(){ return this.produit.getQuantiteEnStock()-this.quantite ;}
+
 }
 

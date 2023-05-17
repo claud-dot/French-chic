@@ -134,6 +134,7 @@ public class VueJetable {
 
         JLabel bonjourTexte = null;
         JLabel produitDuJourTexte = null;
+        JLabel qtEnStockLabel = null;
         JLabel quantiteLabel = null;
 
         String bonjourTxt = "Bonjour " + client.getPrenom() + " " + client.getNom();
@@ -145,6 +146,11 @@ public class VueJetable {
         produitDuJourTexte = new JLabel(produitTxt);
         produitDuJourTexte.setSize(500, 20);
         produitDuJourTexte.setLocation(150, 250);
+
+        String qtProduit = "Quantité en stock : "+produit.getQuantiteEnStock();
+        qtEnStockLabel = new JLabel(qtProduit);
+        qtEnStockLabel.setSize(200 , 20);
+        qtEnStockLabel.setLocation(150 , 268);
 
         quantiteLabel = new JLabel("Quantite");
         quantiteLabel.setSize(120, 20);
@@ -180,6 +186,7 @@ public class VueJetable {
         frame.add(title);
         frame.add(bonjourTexte);
         frame.add(produitDuJourTexte);
+        frame.add(qtEnStockLabel);
         frame.add(quantiteField);
         frame.add(quantiteLabel);
         frame.add(ajouterProduit);
@@ -211,11 +218,12 @@ public class VueJetable {
 
         String prixHTLg = nf.format(ligneC.geProduit().getPrix());
         String montantLg = nf.format(ligneC.getMontant());
+        int stock = ligneC.getStock();
 
-        String[] entetes = {"Libelle", "Prix HT", "Quantite", "Montant"};
+        String[] entetes = {"Libelle", "Prix", "Quantité", "Montant" , "Stock"};
 
         Object[][] donnees = {
-            {ligneC.geProduit().getLibelle(), prixHTLg, new Integer(ligneC.getQuantite()).toString(), montantLg},};
+            {ligneC.geProduit().getLibelle(), prixHTLg, new Integer(ligneC.getQuantite()).toString(), montantLg , stock},};
 
         JTable table = new JTable(donnees, entetes);
         table.setSize(400, 100);

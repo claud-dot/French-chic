@@ -24,10 +24,11 @@ public class Session {
         for (Client client : Client.getLesClients()) {
             if (client.getPseudo().trim().equals(pseudo) && client.getMotDePasse().trim().equals(motDePasse)) {
                 this.ecranCourant=EnumTypeEcran.ECRAN_ACCUEIL_PERSO;
-                return new TraiterIdentificationReponse(ecranCourant, client, new Produit().getProduitDuJour());
+                Produit p = new Produit();
+                return new TraiterIdentificationReponse(ecranCourant, client, p.avoirTousLesProduits() , p.getProduitDuJour());
             }
         }
-        return new TraiterIdentificationReponse(ecranCourant, null, null);
+        return new TraiterIdentificationReponse(ecranCourant, null, null , null);
         
     }
     public TraiterAjoutPanierReponse traiterAjoutPanier(Produit produit, int intg){

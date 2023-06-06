@@ -1,6 +1,7 @@
 package metier;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Produit {
     private String reference;
@@ -107,7 +108,7 @@ public class Produit {
     }
 
     public void initializeProduits(){
-        Produit produit1 = new Produit("REF001", "Cravate", 20f, false, new String[] {"chemise", "cravate"}, 50);
+        Produit produit1 = new Produit("REF001", "Cravate", 20f, true, new String[] {"chemise", "cravate"}, 50);
         Produit produit2 = new Produit("REF002", "Pantalon jean", 30f, true, new String[] {"pantalon", "jean"}, 20);
         Produit produit3 = new Produit("REF003", "Cabas Gucci Blondie petite taille", 50f, false, new String[] {"Gucci", "Cabas"}, 10);
         lesProduits=new ArrayList<>();
@@ -117,10 +118,19 @@ public class Produit {
     }
 
     public Produit getProduitDuJour(){
-        for (Produit produit : lesProduits) {
+        for (Produit produit : this.avoirTousLesProduits()) {
             if(produit.estDuJour)return produit;
         }
         return null;
+    }
+
+    public List<Produit> avoirTousLesProduits(){
+        List<Produit> listProd = new ArrayList<Produit>();
+        listProd.add(new Produit("REF001", "Cravate", 20f, false, new String[] {"chemise", "cravate"}, 50));
+        listProd.add(new Produit("REF002", "Pantalon jean", 30f, true, new String[] {"pantalon", "jean"}, 20));
+        listProd.add(new Produit("REF003", "Cabas Gucci Blondie petite taille", 50f, false, new String[] {"Gucci", "Cabas"}, 10));
+        listProd.add(new Produit("REF003", "Lacoste Polo", 40f, false, new String[] {"Lacoste", "Polo"}, 80));
+        return listProd;
     }
 
 }

@@ -23,7 +23,10 @@ import java.text.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -101,7 +104,7 @@ public class VueJetable {
                 TraiterIdentificationReponse reponse = laSession.traiterIdentification(pseudoField.getText(), mdpField.getText());
                 frame.setVisible(false);
                 if (reponse.typeEcran == EnumTypeEcran.ECRAN_ACCUEIL_PERSO) {
-                    afficherEcranAccueilPerso(reponse.leClient, reponse.leProduit);
+                    afficherEcranAccueilPerso(reponse.leClient , reponse.lesProduit , reponse.leProduit);
                 }
             }
         });
@@ -116,9 +119,9 @@ public class VueJetable {
 
     }
 
-    private static void afficherEcranAccueilPerso(final Client client, final Produit produit) {
+    private static void afficherEcranAccueilPerso(final Client client, final List<Produit> produits , Produit produit) {
         frame = new JFrame();
-        frame.setTitle("French Chic - Produit du jour");
+        frame.setTitle("French Chic - les Produits");
         frame.setSize(650, 500);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
@@ -129,35 +132,91 @@ public class VueJetable {
         frame.setLayout(null);
 
         JLabel title = new JLabel("French Chic");
-        title.setLocation(150, 50);
+        title.setLocation(80, 20);
         title.setSize(1000, 100);
-        Font f = new Font("", Font.PLAIN, 70);
+        Font f = new Font("", Font.PLAIN, 55);
         title.setFont(f);
         title.setForeground(Color.MAGENTA);
 
         JLabel bonjourTexte = null;
         JLabel produitDuJourTexte = null;
+        JLabel produitChoix = null;
         JLabel qtEnStockLabel = null;
+        JLabel qtEnStockLabelChx = null;
         JLabel quantiteLabel = null;
 
         String bonjourTxt = "Bonjour " + client.getPrenom() + " " + client.getNom();
         bonjourTexte = new JLabel(bonjourTxt);
         bonjourTexte.setSize(250, 20);
-        bonjourTexte.setLocation(150, 200);
+        bonjourTexte.setLocation(115, 125);
 
         String produitTxt = "Le produit du jour est le \"" + produit.getLibelle() + "\" au prix de " + produit.getPrix() + " €";
         produitDuJourTexte = new JLabel(produitTxt);
         produitDuJourTexte.setSize(500, 20);
-        produitDuJourTexte.setLocation(150, 250);
+        produitDuJourTexte.setLocation(115, 165);
 
         String qtProduit = "Quantité en stock : "+produit.getQuantiteEnStock();
         qtEnStockLabel = new JLabel(qtProduit);
         qtEnStockLabel.setSize(200 , 20);
-        qtEnStockLabel.setLocation(150 , 268);
+        qtEnStockLabel.setLocation(115 , 188);
+
+//        TABLEAU
+        int lineDuJour = 0;
+        String[] entetes = {"Libellé", "Prix", "Stock"};
+        Object[][] donnees = new Object[produits.size()][3];
+        for (int i = 0; i <produits.size() ; i++) {
+            if(produits.get(i).isEstDuJour()) lineDuJour = i;
+            donnees[i][0] = produits.get(i).getLibelle();
+            donnees[i][1] = produits.get(i).getPrix()+" €";
+            donnees[i][2] = produits.get(i).getQuantiteEnStock();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(donnees, entetes);
+        JTable table = new JTable(model);
+        //entete
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setDefaultRenderer(new CustomHeaderRenderer());
+        Font tableFont = table.getFont();
+        Font resizedFont = tableFont.deriveFont(tableFont.getSize() + 2f);
+        table.setFont(resizedFont);
+        //Row
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int columnIndex = 0; columnIndex < table.getColumnCount(); columnIndex++) {
+            table.getColumnModel().getColumn(columnIndex).setCellRenderer(centerRenderer);
+        }
+
+        CustomRowRenderer rowRenderer = new CustomRowRenderer();
+        rowRenderer.setRowToColor(lineDuJour); // Spécifiez le numéro de la ligne à colorer
+        for (int columnIndex = 0; columnIndex < table.getColumnCount(); columnIndex++) {
+            table.getColumnModel().getColumn(columnIndex).setCellRenderer(rowRenderer);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        Dimension preferredSize = new Dimension(460, 92);
+        scrollPane.setPreferredSize(preferredSize);
+        JPanel paneTab = new JPanel();
+        paneTab.setLocation(115, 230);
+        paneTab.setSize(460, 92);
+        paneTab.setBackground(Color.WHITE);
+        paneTab.add(scrollPane);
+
+        //Hide element
+        JPanel paneAdd = new JPanel(null);
+        paneAdd.setLocation(115, 335);
+        paneAdd.setSize(460, 80);
+        paneAdd.setBackground(Color.white);
+
+        String produitChx = "Le produit choisi est le \"" + produit.getLibelle() + "\" au prix de " + produit.getPrix() + " €";
+        produitChoix = new JLabel(produitChx);
+        produitChoix.setBounds(0, 0, 460, 20);
+
+        String qtChx = "Quantité en stock : "+produit.getQuantiteEnStock();
+        qtEnStockLabelChx = new JLabel(qtChx);
+        qtEnStockLabelChx.setBounds(0, 22, 200, 20);
 
         quantiteLabel = new JLabel("Quantite");
-        quantiteLabel.setSize(120, 20);
-        quantiteLabel.setLocation(250, 325);
+        quantiteLabel.setBounds(0, 48, 120, 20);
 
         int longueur = 200;
         int largeur = 30;
@@ -166,22 +225,50 @@ public class VueJetable {
 
         quantiteField = new JTextField();
         quantiteField.setSize(longueur, largeur);
-        quantiteField.setLocation(320, 320);
-        quantiteField.setSize(50, largeur);
+        quantiteField.setBounds(130, 48, 50, largeur);
 
-        JButton ajouterProduit = new JButton("Ajouter le produit du jour au panier");
-        ajouterProduit.setLocation(250, 370);
-        ajouterProduit.setSize(longueur, largeur);
+        JButton ajouterProduit = new JButton("Ajouter le produit choisi au panier");
+        ajouterProduit.setBounds(210, 48, longueur, largeur);
 
-        ajouterProduit.addActionListener(new ActionListener() {
+        paneAdd.add(produitChoix);
+        paneAdd.add(qtEnStockLabelChx);
+        paneAdd.add(quantiteField);
+        paneAdd.add(quantiteLabel);
+        paneAdd.add(ajouterProduit);
+        paneAdd.setVisible(false);
+
+        JLabel finalProduitChoix = produitChoix;
+        JLabel finalQtEnStockLabelChx = qtEnStockLabelChx;
+
+        //Pour avoir l'info du tabeau lor d'un click
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-                Integer intg = new Integer(quantiteField.getText());
-                TraiterAjoutPanierReponse reponse = laSession.traiterAjoutPanier(produit, intg);
-                frame.setVisible(false);
-                if (reponse.typeEcran == EnumTypeEcran.ECRAN_PANIER) {
-                    afficherEcranPanier(reponse.laCommande);
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        String produitChx = "Le produit choisi est le \"" + produits.get(selectedRow).getLibelle() + "\" au prix de " + produits.get(selectedRow).getPrix() + " €";
+                        finalProduitChoix.setText(produitChx);
+                        String qtChx = "Quantité en stock : " + produits.get(selectedRow).getQuantiteEnStock();
+                        finalQtEnStockLabelChx.setText(qtChx);
+                        paneAdd.setVisible(true);
+
+                        //Pour pouboir ajouter le produit choisi
+                        ajouterProduit.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent arg0) {
+                                // TODO Auto-generated method stub
+                                Integer intg = new Integer(quantiteField.getText());
+                                TraiterAjoutPanierReponse reponse = laSession.traiterAjoutPanier(produits.get(selectedRow), intg);
+                                frame.setVisible(false);
+                                if (reponse.typeEcran == EnumTypeEcran.ECRAN_PANIER) {
+                                    afficherEcranPanier(reponse.laCommande);
+                                }
+                            }
+                        });
+                    }else{
+                        paneAdd.setVisible(false);
+                    }
                 }
             }
         });
@@ -190,9 +277,8 @@ public class VueJetable {
         frame.add(bonjourTexte);
         frame.add(produitDuJourTexte);
         frame.add(qtEnStockLabel);
-        frame.add(quantiteField);
-        frame.add(quantiteLabel);
-        frame.add(ajouterProduit);
+        frame.add(paneTab);
+        frame.add(paneAdd);
         frame.setVisible(true);
     }
 
@@ -293,6 +379,26 @@ public class VueJetable {
             setFont(font.deriveFont(font.getStyle() | Font.BOLD));
         }
     }
+
+    static class CustomRowRenderer extends DefaultTableCellRenderer {
+        private int rowToColor;
+
+        public void setRowToColor(int row) {
+            this.rowToColor = row;
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (row == rowToColor) {
+                component.setBackground(Color.pink);
+            } else {
+                component.setBackground(table.getBackground());
+            }
+            return component;
+        }
+    }
+
 }
 
 

@@ -1,6 +1,14 @@
 package controleur;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 
 public class AccessBase {
@@ -16,8 +24,43 @@ public class AccessBase {
                 throw new RuntimeException("Fichier de base de données introuvable !");
             }
             String chemin = resourceUrl.getPath();
-            connection = DriverManager.getConnection("jdbc:sqlite:"+chemin);
-        } catch (SQLException  e) {
+
+//            AccessBase.class.getClassLoader().get
+
+            // Créer un fichier temporaire pour extraire la base de données SQLite
+//            File tempFile = File.createTempFile("temp_db", ".db");
+
+            String tempFile = System.getProperty("java.io.tmpdir" ) + "vente_stock.db";
+
+            System.out.println(AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db"));
+
+            // Extraire la base de données SQLite du JAR vers le fichier temporaire
+            try (InputStream inputStream = AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db");
+                 OutputStream outputStream = new FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+
+            // Charger le pilote SQLite
+            Class.forName("org.sqlite.JDBC");
+
+            // URL de connexion à la base de données SQLite
+//            String url = "jdbc:sqlite:" + tempFile.getAbsolutePath();
+            String url = "jdbc:sqlite:" + tempFile;
+
+            // Établir la connexion à la base de données SQLite
+            connection = DriverManager.getConnection(url);
+//            connection = DriverManager.getConnection("jdbc:sqlite:"+chemin);
+
+            // Supprimer le fichier temporaire après utilisation
+//            tempFile.delete();
+
+//            Files.deleteIfExists();
+        } catch (Exception  e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Exception", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         }
         return connection;

@@ -45,6 +45,7 @@ public class VueJetable {
         laSession = new Session();
         TraiterConnexionReponse reponse = laSession.traiterConnexion();
         if (reponse.typeEcran == EnumTypeEcran.ECRAN_ACCUEIL) {
+//            AccessBase.getConnection();
             afficherEcranAccueil();
         }
 
@@ -101,6 +102,8 @@ public class VueJetable {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 // TODO Auto-generated method stub
+
+
                 TraiterIdentificationReponse reponse = laSession.traiterIdentification(pseudoField.getText(), mdpField.getText());
                 frame.setVisible(false);
                 if (reponse.typeEcran == EnumTypeEcran.ECRAN_ACCUEIL_PERSO) {
@@ -120,6 +123,7 @@ public class VueJetable {
     }
 
     private static void afficherEcranAccueilPerso(final Client client, final List<Produit> produits , Produit produit) {
+//        JOptionPane.showMessageDialog(null, "Fichier de base de données introuvable !", "Alerte", JOptionPane.WARNING_MESSAGE);
         frame = new JFrame();
         frame.setTitle("French Chic - les Produits");
         frame.setSize(650, 500);

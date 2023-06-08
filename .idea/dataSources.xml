@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="vente_stock [3]" uuid="dba2f454-fe17-4396-9f70-639661e580cd">
+    <data-source source="LOCAL" name="vente_stock" uuid="09b1945d-668e-4c8a-a506-227addf409f7">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Dev\Study\DIL\French-chic-app\vente_stock.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.34.0/sqlite-jdbc-3.34.0.jar</url>
-        </library>
-      </libraries>
-    </data-source>
-    <data-source source="LOCAL" name="vente_stock" uuid="bc7ed76a-80e7-4c50-a9c7-ac6afdfde109">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Dev\Study\DIL\French-chic-app\out\production\French-chic-app\vente_stock.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\Dev\Study\DIL\French-chic-app\resources\vente_stock.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

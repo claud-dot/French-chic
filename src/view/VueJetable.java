@@ -244,6 +244,7 @@ public class VueJetable {
         JLabel finalProduitChoix = produitChoix;
         JLabel finalQtEnStockLabelChx = qtEnStockLabelChx;
 
+        final int[] idSelect = {0};
         //Pour avoir l'info du tabeau lor d'un click
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -256,23 +257,24 @@ public class VueJetable {
                         String qtChx = "Quantité en stock : " + produits.get(selectedRow).getQuantiteEnStock();
                         finalQtEnStockLabelChx.setText(qtChx);
                         paneAdd.setVisible(true);
-
+                        idSelect[0] = selectedRow;
                         //Pour pouboir ajouter le produit choisi
-                        ajouterProduit.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent arg0) {
-                                // TODO Auto-generated method stub
-                                Integer intg = new Integer(quantiteField.getText());
-                                TraiterAjoutPanierReponse reponse = laSession.traiterAjoutPanier(client.getId(),produits.get(selectedRow), intg);
-                                frame.setVisible(false);
-                                if (reponse.typeEcran == EnumTypeEcran.ECRAN_PANIER) {
-                                    afficherEcranPanier(reponse.laCommande);
-                                }
-                            }
-                        });
                     }else{
                         paneAdd.setVisible(false);
                     }
+                }
+            }
+        });
+
+        ajouterProduit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                Integer intg = new Integer(quantiteField.getText());
+                TraiterAjoutPanierReponse reponse = laSession.traiterAjoutPanier(client.getId(),produits.get(idSelect[0]), intg);
+                frame.setVisible(false);
+                if (reponse.typeEcran == EnumTypeEcran.ECRAN_PANIER) {
+                    afficherEcranPanier(reponse.laCommande);
                 }
             }
         });
@@ -314,7 +316,7 @@ public class VueJetable {
             donnees[i][1] = ligneC.get(i).geProduit().getPrix()+" €";
             donnees[i][2] = ligneC.get(i).getQuantite();
             donnees[i][3] = ligneC.get(i).getMontant()+" €";
-            donnees[i][4] = ligneC.get(i).getStock();
+            donnees[i][4] = ligneC.get(i).geProduit().getQuantiteEnStock();
         }
 //        String prixHTLg = ligneC.geProduit().getPrix()+"";
 //        String montantLg = ligneC.getMontant()+"";

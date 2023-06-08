@@ -32,7 +32,9 @@ public class LigneCommande {
 
     public int getStock(){
         System.out.println("dddd " +this.produit.getQuantiteEnStock());
-        return this.produit.getQuantiteEnStock()-this.quantite ;}
+        return this.produit.getQuantiteEnStock()-this.quantite ;
+//        return this.produit.getQuantiteEnStock();
+    }
 
     public int getIdclient() {
         return idclient;

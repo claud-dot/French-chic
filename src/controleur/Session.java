@@ -36,6 +36,7 @@ public class Session {
     }
 
     public TraiterAjoutPanierReponse traiterAjoutPanier(int idClient, Produit produit, int intg){
+        System.out.println("HUHUHU");
         this.ecranCourant=EnumTypeEcran.ECRAN_PANIER;
         LigneCommande ligneCommande=new LigneCommande(idClient , produit,intg);
         Commande commande = new Commande();

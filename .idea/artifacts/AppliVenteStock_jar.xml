@@ -3,6 +3,7 @@
     <output-path>$USER_HOME$/Downloads/Programs</output-path>
     <root id="archive" name="AppliVenteStock.jar">
       <element id="module-output" name="French-chic-app" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../sqlite-jdbc-3.27.2.1.jar" />
     </root>
   </artifact>
 </component>

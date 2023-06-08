@@ -1,12 +1,19 @@
 package metier;
 
+import controleur.AccessBase;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Produit {
+    private int idproduit;
     private String reference;
     private String libelle;
-    private float prix;
+    private double prix;
     private boolean estDuJour;
     private String[] motCles;
     private int quantiteEnStock;
@@ -15,6 +22,19 @@ public class Produit {
     public Produit(){
         initializeProduits();
     }
+
+    public int getIdproduit() {
+        return idproduit;
+    }
+
+    public void setIdproduit(int idproduit) {
+        this.idproduit = idproduit;
+    }
+
+    public void setPrix(double prix) {
+        this.prix = prix;
+    }
+
     public Produit(String reference, String libelle, float prix, boolean estDuJour, String[] motCles, int quantiteEnStock) {
         this.reference = reference;
         this.libelle = libelle;
@@ -22,6 +42,14 @@ public class Produit {
         this.estDuJour = estDuJour;
         this.motCles = motCles;
         this.quantiteEnStock = quantiteEnStock;
+    }
+
+    public Produit(int id , String libelle , double prix, int duJour , int qtStock){
+        this.idproduit = id;
+        this.libelle = libelle;
+        this.prix = prix;
+        this.estDuJour = duJour == 0;
+        this.quantiteEnStock = qtStock;
     }
 
     public static Produit rechercherProduitDuJour() {
@@ -67,7 +95,7 @@ public class Produit {
         this.libelle = libelle;
     }
 
-    public float getPrix() {
+    public double getPrix() {
         return prix;
     }
 
@@ -81,14 +109,6 @@ public class Produit {
 
     public void setEstDuJour(boolean estDuJour) {
         this.estDuJour = estDuJour;
-    }
-
-    public String[] getMotCles() {
-        return motCles;
-    }
-
-    public void setMotCles(String[] motCles) {
-        this.motCles = motCles;
     }
 
     public int getQuantiteEnStock() {
@@ -126,10 +146,34 @@ public class Produit {
 
     public List<Produit> avoirTousLesProduits(){
         List<Produit> listProd = new ArrayList<Produit>();
-        listProd.add(new Produit("REF001", "Cravate", 20f, false, new String[] {"chemise", "cravate"}, 50));
-        listProd.add(new Produit("REF002", "Pantalon jean", 30f, true, new String[] {"pantalon", "jean"}, 20));
-        listProd.add(new Produit("REF003", "Cabas Gucci Blondie petite taille", 50f, false, new String[] {"Gucci", "Cabas"}, 10));
-        listProd.add(new Produit("REF003", "Lacoste Polo", 40f, false, new String[] {"Lacoste", "Polo"}, 80));
+        Statement statement = null;
+        ResultSet resultSet = null;
+        Connection connection = null;
+        try {
+            connection = AccessBase.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM Produit");
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String libelle = resultSet.getString("libelle");
+                double prix = resultSet.getDouble("prix");
+                int duJour = resultSet.getInt("estDuJour");
+                int qt = resultSet.getInt("quantiteEnStock");
+                System.out.println("id : "+id +" libel :"+ libelle+" ");
+                listProd.add(new Produit(id , libelle ,prix ,duJour ,qt));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return listProd;
     }
 

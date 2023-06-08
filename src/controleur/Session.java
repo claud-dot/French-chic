@@ -31,10 +31,13 @@ public class Session {
         return new TraiterIdentificationReponse(ecranCourant, null, null , null);
         
     }
-    public TraiterAjoutPanierReponse traiterAjoutPanier(Produit produit, int intg){
+
+    public TraiterAjoutPanierReponse traiterAjoutPanier(int idClient, Produit produit, int intg){
         this.ecranCourant=EnumTypeEcran.ECRAN_PANIER;
-        LigneCommande ligneCommande=new LigneCommande(produit,intg);
-        Commande commande_=new Commande(new LigneCommande[]{ligneCommande});
-        return new TraiterAjoutPanierReponse(this.ecranCourant, commande_);
+        LigneCommande ligneCommande=new LigneCommande(idClient , produit,intg);
+        Commande commande = new Commande();
+        commande.ajouterCommande(ligneCommande);
+        commande=new Commande(LigneCommande.avoirLigneCommande(idClient));
+        return new TraiterAjoutPanierReponse(this.ecranCourant, commande);
     }
 }

@@ -42,18 +42,10 @@ public class VueJetable {
 
     public static void main(String[] args) {
         initialize();
-        AccessBase accessBase = new AccessBase();
-        List<Client> clients = accessBase.getClients();
-        System.out.println(clients.size());
-        for (Client c:
-             clients) {
-            System.out.println("Nom : "+c.getNom());
-        }
-        System.out.println();
         laSession = new Session();
         TraiterConnexionReponse reponse = laSession.traiterConnexion();
         if (reponse.typeEcran == EnumTypeEcran.ECRAN_ACCUEIL) {
-//            afficherEcranAccueil();
+            afficherEcranAccueil();
         }
 
     }
@@ -267,7 +259,7 @@ public class VueJetable {
                             public void actionPerformed(ActionEvent arg0) {
                                 // TODO Auto-generated method stub
                                 Integer intg = new Integer(quantiteField.getText());
-                                TraiterAjoutPanierReponse reponse = laSession.traiterAjoutPanier(produits.get(selectedRow), intg);
+                                TraiterAjoutPanierReponse reponse = laSession.traiterAjoutPanier(client.getId(),produits.get(selectedRow), intg);
                                 frame.setVisible(false);
                                 if (reponse.typeEcran == EnumTypeEcran.ECRAN_PANIER) {
                                     afficherEcranPanier(reponse.laCommande);
@@ -309,16 +301,20 @@ public class VueJetable {
         title.setFont(f);
         title.setForeground(Color.MAGENTA);
 
-        LigneCommande ligneC = laCommande.getLesCommandes()[0];
-
-        String prixHTLg = ligneC.geProduit().getPrix()+"";
-        String montantLg = ligneC.getMontant()+"";
-        int stock = ligneC.getStock();
-
         String[] entetes = {"Libellé", "Prix", "Quantité", "Montant" , "Stock"};
-
-        Object[][] donnees = {
-            {ligneC.geProduit().getLibelle(), prixHTLg+" €", new Integer(ligneC.getQuantite()).toString(), montantLg+" €" , stock},};
+        List<LigneCommande> ligneC = laCommande.getLesCommandes();
+        Object[][] donnees =  new Object[ligneC.size()][5];
+        for (int i = 0; i <ligneC.size() ; i++) {
+            System.out.println(ligneC.get(i).geProduit().getLibelle());
+            donnees[i][0] = ligneC.get(i).geProduit().getLibelle();
+            donnees[i][1] = ligneC.get(i).geProduit().getPrix()+" €";
+            donnees[i][2] = ligneC.get(i).getQuantite();
+            donnees[i][3] = ligneC.get(i).getMontant()+" €";
+            donnees[i][4] = ligneC.get(i).getStock();
+        }
+//        String prixHTLg = ligneC.geProduit().getPrix()+"";
+//        String montantLg = ligneC.getMontant()+"";
+//        int stock = ligneC.getStock();
 
         DefaultTableModel model = new DefaultTableModel(donnees, entetes);
         JTable table = new JTable(model);

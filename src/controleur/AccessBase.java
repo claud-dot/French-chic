@@ -33,28 +33,31 @@ public class AccessBase {
 //            AccessBase.class.getClassLoader().get
 
             // Créer un fichier temporaire pour extraire la base de données SQLite
-            File tempFile = File.createTempFile("temp_db", ".db");
+//            File tempFile = File.createTempFile("temp_db", ".db");
+            File file = new File("vente_stock.db");
+            if (!file.exists()) {
+                file.createNewFile();
+                // Extraire la base de données SQLite du JAR vers le fichier temporaire
+                try (InputStream inputStream = AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db");
+                     OutputStream outputStream = new FileOutputStream(file)) {
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
+            }
 
 //            String tempFile = System.getProperty("java.io.tmpdir" ) + "vente_stock.db";
 
 //            System.out.println(AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db"));
-
-            // Extraire la base de données SQLite du JAR vers le fichier temporaire
-            try (InputStream inputStream = AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db");
-                 OutputStream outputStream = new FileOutputStream(tempFile)) {
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-            }
 
             // Charger le pilote SQLite
             Class.forName("org.sqlite.JDBC");
 
             // URL de connexion à la base de données SQLite
 //            String url = "jdbc:sqlite:" + tempFile.getAbsolutePath();
-            String url = "jdbc:sqlite:" + tempFile;
+            String url = "jdbc:sqlite:" + file.getAbsolutePath();
 
             // Établir la connexion à la base de données SQLite
             connection = DriverManager.getConnection(url);

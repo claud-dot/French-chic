@@ -36,6 +36,7 @@ public class AccessBase {
 //            File tempFile = File.createTempFile("temp_db", ".db");
             File file = new File("vente_stock.db");
             if (!file.exists()) {
+                System.out.println("mandeha");
                 file.createNewFile();
                 // Extraire la base de données SQLite du JAR vers le fichier temporaire
                 try (InputStream inputStream = AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db");

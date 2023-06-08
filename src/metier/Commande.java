@@ -34,14 +34,14 @@ public class Commande {
         return this.lesCommandes;
     }
     
-    public void ajouterCommande(LigneCommande commande) {
+    public void ajouterCommande(LigneCommande commande, Connection connection) {
         System.out.println("idClient : "+commande.getIdclient());
         String sqlAjout = "INSERT INTO Commande (idclient,idproduit,quantite) VALUES (" + commande.getIdclient()  + ","+ commande.geProduit().getIdproduit()+","+commande.getQuantite()+")";
         String sqlModifie = "UPDATE Produit set quantiteEnStock= "+commande.getStock()+" WHERE id="+commande.geProduit().getIdproduit();
         Statement statement = null;
-        Connection connection = null;
+//        Connection connection = null;
         try {
-            connection = AccessBase.getConnection();
+//            connection = AccessBase.getConnection();
             statement = connection.createStatement();
             statement.execute(sqlAjout);
             statement.execute(sqlModifie);
@@ -50,7 +50,7 @@ public class Commande {
         } finally {
             try {
                 if (statement != null) statement.close();
-                if (connection != null) connection.close();
+//                if (connection != null) connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

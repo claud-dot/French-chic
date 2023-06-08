@@ -16,6 +16,8 @@ public class AccessBase {
 
     }
 
+    private static Connection connection;
+
     public static Connection getConnection(){
         Connection connection = null;
         try {
@@ -24,15 +26,18 @@ public class AccessBase {
                 throw new RuntimeException("Fichier de base de données introuvable !");
             }
             String chemin = resourceUrl.getPath();
+//            File file = new File("test.txt");
+////            file.createNewFile();
+//            if (!file.exists()) file
 
 //            AccessBase.class.getClassLoader().get
 
             // Créer un fichier temporaire pour extraire la base de données SQLite
-//            File tempFile = File.createTempFile("temp_db", ".db");
+            File tempFile = File.createTempFile("temp_db", ".db");
 
-            String tempFile = System.getProperty("java.io.tmpdir" ) + "vente_stock.db";
+//            String tempFile = System.getProperty("java.io.tmpdir" ) + "vente_stock.db";
 
-            System.out.println(AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db"));
+//            System.out.println(AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db"));
 
             // Extraire la base de données SQLite du JAR vers le fichier temporaire
             try (InputStream inputStream = AccessBase.class.getClassLoader().getResourceAsStream("vente_stock.db");

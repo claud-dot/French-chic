@@ -137,20 +137,20 @@ public class Produit {
         lesProduits.add(produit3);
     }
 
-    public Produit getProduitDuJour(){
-        for (Produit produit : this.avoirTousLesProduits()) {
+    public Produit getProduitDuJour(Connection connection){
+        for (Produit produit : this.avoirTousLesProduits(connection)) {
             if(produit.estDuJour)return produit;
         }
         return null;
     }
 
-    public List<Produit> avoirTousLesProduits(){
+    public List<Produit> avoirTousLesProduits(Connection connection){
         List<Produit> listProd = new ArrayList<Produit>();
         Statement statement = null;
         ResultSet resultSet = null;
-        Connection connection = null;
+//        Connection connection = null;
         try {
-            connection = AccessBase.getConnection();
+//            connection = AccessBase.getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM Produit");
 
@@ -163,13 +163,13 @@ public class Produit {
                 System.out.println("id : "+id +" libel :"+ libelle+" ");
                 listProd.add(new Produit(id , libelle ,prix ,duJour ,qt));
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
         } finally {
             try {
                 if (resultSet != null) resultSet.close();
                 if (statement != null) statement.close();
-                if (connection != null) connection.close();
+//                if (connection != null) connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

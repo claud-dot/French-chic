@@ -5,8 +5,11 @@ import metier.Commande;
 import metier.LigneCommande;
 import metier.Produit;
 
+import java.sql.Connection;
+
 public class Session {
     public EnumTypeEcran ecranCourant=EnumTypeEcran.ECRAN_ACCUEIL;
+    private Connection connection = AccessBase.getConnection();
 
     public TraiterConnexionReponse traiterConnexion() {
         // méthode permettant de traiter la connexion de l'utilisateur
@@ -25,7 +28,7 @@ public class Session {
             if (client.getPseudo().trim().equals(pseudo) && client.getMotDePasse().trim().equals(motDePasse)) {
                 this.ecranCourant=EnumTypeEcran.ECRAN_ACCUEIL_PERSO;
                 Produit p = new Produit();
-                return new TraiterIdentificationReponse(ecranCourant, client, p.avoirTousLesProduits() , p.getProduitDuJour());
+                return new TraiterIdentificationReponse(ecranCourant, client, p.avoirTousLesProduits(connection) , p.getProduitDuJour(connection));
             }
         }
         return new TraiterIdentificationReponse(ecranCourant, null, null , null);
@@ -36,8 +39,8 @@ public class Session {
         this.ecranCourant=EnumTypeEcran.ECRAN_PANIER;
         LigneCommande ligneCommande=new LigneCommande(idClient , produit,intg);
         Commande commande = new Commande();
-        commande.ajouterCommande(ligneCommande);
-        commande=new Commande(LigneCommande.avoirLigneCommande(idClient));
+        commande.ajouterCommande(ligneCommande, connection);
+        commande=new Commande(LigneCommande.avoirLigneCommande(idClient, connection));
         return new TraiterAjoutPanierReponse(this.ecranCourant, commande);
     }
 }

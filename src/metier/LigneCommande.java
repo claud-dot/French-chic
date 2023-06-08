@@ -40,13 +40,13 @@ public class LigneCommande {
         this.idclient = idclient;
     }
 
-    public static List<LigneCommande> avoirLigneCommande(int idclient){
+    public static List<LigneCommande> avoirLigneCommande(int idclient, Connection connection){
         List<LigneCommande> ligneCommandes = new ArrayList<LigneCommande>();
         Statement statement = null;
         ResultSet resultSet = null;
-        Connection connection = null;
+//        Connection connection = null;
         try {
-            connection = AccessBase.getConnection();
+//            connection = AccessBase.getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM Commande_client WHERE idclient="+idclient);
 
@@ -66,7 +66,7 @@ public class LigneCommande {
             try {
                 if (resultSet != null) resultSet.close();
                 if (statement != null) statement.close();
-                if (connection != null) connection.close();
+//                if (connection != null) connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

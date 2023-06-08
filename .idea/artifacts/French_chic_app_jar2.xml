@@ -1,10 +1,10 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="French-chic-app:jar2">
-    <output-path>$PROJECT_DIR$/../../../../French_chic_app_jar2</output-path>
+  <artifact type="jar" name="French-chic-app:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/French_chic_app_jar2</output-path>
     <root id="archive" name="French-chic-app.jar">
       <element id="module-output" name="French-chic-app" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../sqlite-jdbc-3.27.2.1.jar" path-in-jar="/" />
-      <element id="file-copy" path="$PROJECT_DIR$/../../../../sqlite-jdbc-3.27.2.1.jar" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../driver/sqlite-jdbc-3.7.2.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../driver/sqlite-jdbc-3.7.2.jar" />
     </root>
   </artifact>
 </component>

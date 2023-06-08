@@ -1,6 +1,7 @@
 package metier;
 
 public class Client {
+    private int idClient;
     private String numero;
     private String nom;
     private String prenom;
@@ -13,6 +14,12 @@ public class Client {
     public Client(){
         initializeClients();
     };
+
+    public  Client(int id , String nom){
+        this.idClient = id;
+        this.nom = nom;
+    }
+
     public Client(String numero, String nom, String prenom, String adresseFacturation, String pseudo,
                   String adresseLivraison, String motDePasse) {
         this.numero = numero;

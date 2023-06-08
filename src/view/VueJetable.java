@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.Border;*/
 
+import java.sql.Connection;
 import java.text.*;
 import java.util.*;
 import java.awt.*;
@@ -41,11 +42,18 @@ public class VueJetable {
 
     public static void main(String[] args) {
         initialize();
-
+        AccessBase accessBase = new AccessBase();
+        List<Client> clients = accessBase.getClients();
+        System.out.println(clients.size());
+        for (Client c:
+             clients) {
+            System.out.println("Nom : "+c.getNom());
+        }
+        System.out.println();
         laSession = new Session();
         TraiterConnexionReponse reponse = laSession.traiterConnexion();
         if (reponse.typeEcran == EnumTypeEcran.ECRAN_ACCUEIL) {
-            afficherEcranAccueil();
+//            afficherEcranAccueil();
         }
 
     }
